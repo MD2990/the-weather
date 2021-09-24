@@ -1,9 +1,14 @@
 import Head from 'next/head'
+import { useEffect, useState } from 'react';
+import { useSnapshot } from 'valtio';
+import state from '../store';
 
 import Main from './../components/Main';
 
 export default function Home({ data }) {
-	if (data.length < 1) return <div>Lodding ...</div>;
+
+	//if (data.length < 1) return <div>Lodding ...</div>;
+
 
 	return (
 		<div>
@@ -20,9 +25,8 @@ export default function Home({ data }) {
 export async function getServerSideProps() {
 	const API = process.env.API;
 
-
 	const res = await fetch(
-		`https://api.openweathermap.org/data/2.5/weather?q=Rawson&units=metric&appid=${API}`,
+		`https://api.openweathermap.org/data/2.5/weather?q=muscat&units=metric&appid=${API}`,
 	);
 	const data = await res.json();
 

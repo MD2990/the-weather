@@ -21,6 +21,7 @@ import SearchInput from './SearchInput';
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
 import state from '../store';
+import axios from 'axios';
 const round = (r) => Math.round(r || ' Lodging...') + '°';
 
 function StatsCard({
@@ -51,7 +52,7 @@ function StatsCard({
 						color='deepskyblue'>
 						{round(feels_like)}
 					</StatLabel>
-					<StatNumber fontSize={'2xl'} fontWeight={'medium'}>
+					<StatNumber fontSize={'5xl'} fontWeight={'medium'} color='green.50'>
 						{name}
 					</StatNumber>
 					<Image
@@ -60,7 +61,12 @@ function StatsCard({
 						width={52}
 						height={52}
 					/>
-					<StatLabel fontWeight={'medium'} isTruncated mt='-4' mb='8'>
+					<StatLabel
+						color='green.100'
+						fontWeight={'medium'}
+						isTruncated
+						mt='-4'
+						mb='8'>
 						{description}
 					</StatLabel>
 				</Box>
@@ -79,11 +85,11 @@ function StatsCard({
 				</HStack>
 				<Divider borderColor='mediumspringgreen' />
 				<HStack justify='space-around' mt='6' mb='-4'>
-					<StatNumber fontSize={'md'} fontWeight='bold' color='yellow.200'>
+					<StatNumber fontSize={'sm'} fontWeight='light' color='yellow.50'>
 						Sunrise {sunrise}
 					</StatNumber>
 
-					<StatNumber fontSize={'md'} fontWeight='bold' color='yellow.400'>
+					<StatNumber fontSize={'sm'} fontWeight='light' color='yellow.100'>
 						Sunset {sunset}
 					</StatNumber>
 				</HStack>
@@ -96,78 +102,68 @@ export default function Main({ data }) {
 	const snap = useSnapshot(state);
 
 	useEffect(() => {
-		state.data = data.weather[0];
+		state.weather = data.weather[0];
+		state.main = data.main;
+		state.sys = data.sys;
+		state.name = data.name;
+		/* 	async function getUser() {
+			try {
+				const res = await axios.get('/api');
+
+				state.data = res.data;
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		getUser(); */
 	}, [data]);
 
+	if (!snap.weather) return <div>Lodging...</div>;
 
-	console.log(snap.data);
-	/* 		const [vantaEffect, setVantaEffect] = useState(0);
-	const vantaRef = useRef(null);
-	useEffect(() => {
-			if (!vantaEffect) {
-				setVantaEffect(
-					BIRDS({
-						el: vantaRef.current,
-						THREE,
-						color: 0xff3f81,
-						backgroundColor: 0x15173c,
-						maxDistance: 34.0,
-					}),
-				);
-			}
-			return () => {
-				if (vantaEffect) vantaEffect.destory();
-			};
-		}, [vantaEffect]);
-	 */
+	const { description, icon } = snap.weather;
 
-	const { icon, description } = snap.data;
-	const { feels_like, temp_min, temp_max, humidity, name } = data.main;
-	const { sunrise, sunset } = data.sys;
+	const { feels_like, temp_min, temp_max, humidity } = snap.main;
+	const { sunrise, sunset } = snap.sys;
 
 	const rise = new Date(sunrise * 1000).toLocaleTimeString();
 	const sets = new Date(sunset * 1000).toLocaleTimeString();
 
-	//var riseHours = rise.getHours();
-	/* 	var riseMinutes = convertDate(rise.getMinutes()); 
-	var setsHours = convertDate(sets.getHours())
-	var setsMinutes =convertDate(sets.getMinutes()) */
-
+	console.log(data);
 	return (
-		<Box
-			//ref={vantaRef}
-			maxW='7xl'
-			mx={'auto'}
-			pt={5}
-			px={{ base: 2, sm: 12, md: 17 }}>
-			<chakra.h1
-				textAlign={'center'}
-				fontSize={'4xl'}
-				py={10}
-				fontWeight={'bold'}>
-				What is our company doing?
-			</chakra.h1>
+		<>
+			<Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
+				<chakra.h1
+					color='blue.300'
+					fontFamily='serif'
+					textAlign={'center'}
+					fontSize={'5xl'}
+					py={8}
+					fontWeight={'bold'}>
+					Where should you go today?
+				</chakra.h1>
 
-			<Grid
-				columns={1}
-				spacing={{ base: 3, lg: 2, md: 3 }}
-				maxH='fit-content'
-				maxW='2xl'
-				mx='auto'
-				p='4'>
-				<StatsCard
-					description={description}
-					temp_min={temp_min}
-					icon={icon}
-					feels_like={feels_like}
-					temp_max={temp_max}
-					humidity={humidity}
-					name={data.name}
-					sunrise={rise}
-					sunset={sets}
-				/>
-				<SearchInput />
-			</Grid>
-		</Box>
+				<Grid
+					columns={1}
+					spacing={{ base: 3, lg: 2, md: 3 }}
+					maxH='fit-content'
+					maxW='2xl'
+					mx='auto'
+					p='4'>
+					<StatsCard
+						description={description}
+						temp_min={temp_min}
+						icon={icon}
+						feels_like={feels_like}
+						temp_max={temp_max}
+						humidity={humidity}
+						name={snap.name}
+						sunrise={rise}
+						sunset={sets}
+					/>
+					<SearchInput />
+				</Grid>
+			</Box>
+		</>
 	);
 }
