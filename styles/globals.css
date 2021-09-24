@@ -1,0 +1,30 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.im{
+
+ 
+background-color: #08AEEA;
+background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+
+}
+
+
+.text{
+
+ text-shadow: -1px 2px rgba(115, 233, 227, 0.63);
+background: -webkit-linear-gradient(rgb(5, 93, 116), #8dcaba);
+background-clip: text;
+-webkit-text-fill-color: transparent;
+
+
+}
