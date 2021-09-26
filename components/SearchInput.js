@@ -21,23 +21,32 @@ export default function SearchInput() {
 				title: 'Oops...',
 				text: "Please enter some more characters to get your city's info ",
 			});
+
+			
+			
 		} else {
 			async function getUser() {
-				try {
-					const res = await axios.get(`/api/${value}`);
-					if (!res) return (state.isLoading = true);
+				try
+				{
+					state.isLoading = true;
+					const res = await axios.get(`/api/week/${value}`);
 
-					state.weather = res.data.data.weather[0];
-					state.main = res.data.data.main;
-					state.sys = res.data.data.sys;
-					state.name = res.data.data.name;
+					console.log(res);
+
+					state.week = res.data.week;
+
+					state.weather = res.data.current.weather[0];
+					state.main = res.data.current.main; 
+					state.sys = res.data.current.sys;
+					state.name = res.data.current.name;
 					state.isLoading = false;
 				} catch (error) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Oops...',
-						text: 'Something went wrong! Please check your city name and try again ',
+						text: 'Something went wrong! Please check your city name and try again '+error,
 					});
+					state.isLoading = false;
 				}
 			}
 

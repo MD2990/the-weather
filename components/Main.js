@@ -129,7 +129,41 @@ export default function Main({ data }) {
 	const rise = new Date(sunrise * 1000).toLocaleTimeString();
 	const sets = new Date(sunset * 1000).toLocaleTimeString();
 
-	console.log(data);
+
+	const dd = new Date(1632639600 * 1000).toLocaleDateString();
+
+	let SS = () => {
+		return (
+			<>
+				{snap.week.daily?.map((d, index) => {
+					const ds = new Date(d.dt * 1000).toLocaleDateString();
+					const sunrise = new Date(d.sunrise * 1000).toLocaleTimeString();
+					const sunset = new Date(d.sunset * 1000).toLocaleTimeString();
+					const min = d.temp.min;
+					const max = d.temp.max;
+					const day = d.temp.day;
+					const night = d.temp.night;
+					const humidity = d.humidity;
+					const weather = d.weather.map((w) => w);
+					return (
+						<div key={index}>
+							<h1>Date: {ds}</h1>
+							<h1>Sunrise: {sunrise}</h1>
+							<h1>Sunset: {sunset}</h1>
+							<h1>Min: {min}</h1>
+							<h1>max: {max}</h1>
+							<h1>day: {day}</h1>
+							<h1>night: {night}</h1>
+							<h1>humidity: {humidity}</h1>
+							<h1>{weather.id}</h1>
+							<pre>{JSON.stringify(weather)}</pre>
+						</div>
+					);
+				})}
+			</>
+		);
+	};
+
 	return (
 		<>
 			<Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
@@ -150,7 +184,7 @@ export default function Main({ data }) {
 					maxW='2xl'
 					mx='auto'
 					p='4'>
-					<StatsCard
+					<SS
 						description={description}
 						temp_min={temp_min}
 						icon={icon}
@@ -161,6 +195,17 @@ export default function Main({ data }) {
 						sunrise={rise}
 						sunset={sets}
 					/>
+					{/* 		<StatsCard
+						description={description}
+						temp_min={temp_min}
+						icon={icon}
+						feels_like={feels_like}
+						temp_max={temp_max}
+						humidity={humidity}
+						name={snap.name}
+						sunrise={rise}
+						sunset={sets}
+					/> */}
 					<SearchInput />
 				</Grid>
 			</Box>
