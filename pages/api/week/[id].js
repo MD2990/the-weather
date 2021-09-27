@@ -18,4 +18,3 @@ export default async function handler(req, res) {
 	res.json({ current: data, week: data_2 });
 }
 
-//https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}

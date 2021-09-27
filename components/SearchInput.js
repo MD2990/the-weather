@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import { Button } from '@chakra-ui/button';
 import { Input } from '@chakra-ui/input';
 import { VStack } from '@chakra-ui/layout';
-import { log } from 'three';
 import { useSnapshot } from 'valtio';
 import state from '../store';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { TiWeatherStormy } from 'react-icons/ti';
 
 export default function SearchInput() {
 	const snap = useSnapshot(state);
@@ -34,11 +34,8 @@ export default function SearchInput() {
 					console.log(res);
 
 					state.week = res.data.week;
+					state.current = res.data.current;
 
-					state.weather = res.data.current.weather[0];
-					state.main = res.data.current.main; 
-					state.sys = res.data.current.sys;
-					state.name = res.data.current.name;
 					state.isLoading = false;
 				} catch (error) {
 					Swal.fire({
@@ -56,9 +53,16 @@ export default function SearchInput() {
 	return (
 		<VStack mt='7'>
 			<Input ref={ref} placeholder='Search for your city' size='lg' />
-			<Button onClick={handelChange} size='lg' isLoading={snap.isLoading}>
+			<Button
+				leftIcon={<TiWeatherStormy size='2.5rem' />}
+				colorScheme='teal'
+				onClick={handelChange}
+				size='lg'
+				isLoading={snap.isLoading}>
 				Search
 			</Button>
+
+		
 		</VStack>
 	);
 }

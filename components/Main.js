@@ -7,34 +7,30 @@ import {
 	StatNumber,
 	Center,
 	Divider,
-	Grid,
 	HStack,
+	Wrap,
 	VStack,
+	WrapItem,
+	Text,
+	Stack,
 } from '@chakra-ui/react';
-import { Button } from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react';
-import countryList from '../cont';
 
 import Image from 'next/image';
-import { Select } from '@chakra-ui/react';
 import SearchInput from './SearchInput';
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
 import state from '../store';
-import axios from 'axios';
 const round = (r) => Math.round(r || ' Lodging...') + '°';
 
-function StatsCard({
-	description,
-	temp_min,
-	temp_max,
-	icon,
-	feels_like,
-	humidity,
-	name,
-	sunrise,
-	sunset,
-}) {
+function StatsCard({ currentData }) {
+	useEffect(() => {
+		state.current = currentData;
+	}, [currentData]);
+	const data = currentData.weather?.map((w) => w);
+	const { description, icon } = data ? data[0] : [];
+
+	const { feels_like, temp_min, temp_max, humidity } = currentData.main || {};
+	const fontSize = { base: '2xl', lg: '6xl', md: '5xl', sm: '4xl' };
 	return (
 		<Center
 			px={{ base: 4, md: 8 }}
@@ -47,13 +43,16 @@ function StatsCard({
 				<Box textAlign='center' p='2'>
 					<StatLabel
 						className='text'
-						fontSize='6xl'
+						fontSize={fontSize}
 						fontWeight='extrabold'
 						color='deepskyblue'>
 						{round(feels_like)}
 					</StatLabel>
-					<StatNumber fontSize={'5xl'} fontWeight={'medium'} color='green.50'>
-						{name}
+					<StatNumber
+						fontSize={fontSize}
+						fontWeight={'extrabold'}
+						color='green.100'>
+						{currentData.name}
 					</StatNumber>
 					<Image
 						src={`http://openweathermap.org/img/wn/${icon}.png`}
@@ -62,6 +61,8 @@ function StatsCard({
 						height={52}
 					/>
 					<StatLabel
+						textTransform='capitalize'
+						fontSize='xl'
 						color='green.100'
 						fontWeight={'medium'}
 						isTruncated
@@ -80,17 +81,7 @@ function StatsCard({
 						Max: {round(temp_max)}
 					</StatNumber>
 					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Humidity {humidity}
-					</StatNumber>
-				</HStack>
-				<Divider borderColor='mediumspringgreen' />
-				<HStack justify='space-around' mt='6' mb='-4'>
-					<StatNumber fontSize={'sm'} fontWeight='light' color='yellow.50'>
-						Sunrise {sunrise}
-					</StatNumber>
-
-					<StatNumber fontSize={'sm'} fontWeight='light' color='yellow.100'>
-						Sunset {sunset}
+						Humidity: {humidity}
 					</StatNumber>
 				</HStack>
 			</Stat>
@@ -98,116 +89,171 @@ function StatsCard({
 	);
 }
 
-export default function Main({ data }) {
+export default function Main({ currentData, weekData }) {
 	const snap = useSnapshot(state);
 
 	useEffect(() => {
-		state.weather = data.weather[0];
-		state.main = data.main;
-		state.sys = data.sys;
-		state.name = data.name;
-		/* 	async function getUser() {
-			try {
-				const res = await axios.get('/api');
+		state.current = currentData;
+		state.week = weekData;
+	}, [currentData, weekData]);
 
-				state.data = res.data;
-			} catch (error) {
-				console.error(error);
-			}
-		}
+	if (!snap.current || !snap.week) return <Center mt='20%'>Lodging...</Center>;
 
-		getUser(); */
-	}, [data]);
-
-	if (!snap.weather) return <div>Lodging...</div>;
-
-	const { description, icon } = snap.weather;
-
-	const { feels_like, temp_min, temp_max, humidity } = snap.main;
-	const { sunrise, sunset } = snap.sys;
-
-	const rise = new Date(sunrise * 1000).toLocaleTimeString();
-	const sets = new Date(sunset * 1000).toLocaleTimeString();
-
-
-	const dd = new Date(1632639600 * 1000).toLocaleDateString();
-
-	let SS = () => {
+	const Weekly = () => {
 		return (
 			<>
-				{snap.week.daily?.map((d, index) => {
-					const ds = new Date(d.dt * 1000).toLocaleDateString();
-					const sunrise = new Date(d.sunrise * 1000).toLocaleTimeString();
-					const sunset = new Date(d.sunset * 1000).toLocaleTimeString();
-					const min = d.temp.min;
-					const max = d.temp.max;
-					const day = d.temp.day;
-					const night = d.temp.night;
-					const humidity = d.humidity;
-					const weather = d.weather.map((w) => w);
-					return (
-						<div key={index}>
-							<h1>Date: {ds}</h1>
-							<h1>Sunrise: {sunrise}</h1>
-							<h1>Sunset: {sunset}</h1>
-							<h1>Min: {min}</h1>
-							<h1>max: {max}</h1>
-							<h1>day: {day}</h1>
-							<h1>night: {night}</h1>
-							<h1>humidity: {humidity}</h1>
-							<h1>{weather.id}</h1>
-							<pre>{JSON.stringify(weather)}</pre>
-						</div>
-					);
-				})}
+				<Wrap spacing='2' justify='center' my='6' className='t2' p='2'>
+					{snap.week.daily?.map((d, index) => {
+						const ds = new Date(d.dt * 1000).toLocaleDateString();
+						const options = { hour: '2-digit', minute: '2-digit' };
+						const theDay = new Date(d.dt * 1000).toLocaleString('en-us', {
+							weekday: 'long',
+						});
+						const sunrise = new Date(d.sunrise * 1000).toLocaleTimeString(
+							'local',
+							options,
+						);
+						const sunset = new Date(d.sunset * 1000).toLocaleTimeString(
+							'local',
+							options,
+						);
+						const min = d.temp.min;
+						const max = d.temp.max;
+						const day = d.temp.day;
+						const night = d.temp.night;
+
+						const weather = d.weather.map((w) => w);
+						return (
+							<Wrap
+								p='4'
+								key={index}
+								className='im2'
+								borderRadius='xl'
+								justify='space-around'
+								maxW='30rem'
+								spacing='4'>
+								<WrapItem>
+									<HStack
+										justify='space-between'
+										fontSize={{ base: 'sm', lg: 'lg', md: 'md', sm: 'xs' }}>
+										<Text>{index == 0 ? 'Today' : theDay}</Text>
+
+										<Text> {ds}</Text>
+									</HStack>
+								</WrapItem>
+
+								<Divider
+									mb='4'
+									mt='2'
+									borderColor='green.100'
+									borderWidth='thin'
+									shadow='2xl'
+								/>
+
+								<WrapItem>
+									<VStack>
+										<Text>Sunrise {sunrise.replace('AM', '')}</Text>
+
+										<Text> Sunset {sunset.replace('PM', '')}</Text>
+									</VStack>
+								</WrapItem>
+								<WrapItem>
+									<Divider
+										orientation='vertical'
+										borderColor='green.100'
+										shadow='sm'
+									/>
+								</WrapItem>
+
+								<WrapItem>
+									<VStack>
+										<Text>Min {round(min)}</Text>
+										<Text>Max {round(max)}</Text>
+									</VStack>
+								</WrapItem>
+								<WrapItem>
+									<Divider
+										orientation='vertical'
+										borderColor='green.100'
+										shadow='sm'
+									/>
+								</WrapItem>
+								<WrapItem>
+									<VStack>
+										<Text>Day {round(day)}</Text>
+										<Text>Night {round(night)}</Text>
+									</VStack>
+								</WrapItem>
+								<WrapItem>
+									<Divider
+										orientation='vertical'
+										borderColor='green.100'
+										shadow='sm'
+									/>
+								</WrapItem>
+								<WrapItem>
+									<VStack>
+										<Stack mt='-5' p='1'>
+											{weather.map((w) => (
+												<Box textAlign='center' key={w.id}>
+													<Image
+														src={`http://openweathermap.org/img/wn/${w.icon}.png`}
+														alt='universe'
+														width={52}
+														height={52}
+													/>
+													<Text
+														isTruncated
+														textTransform='capitalize'
+														textOverflow='ellipsis'
+														mt='-4'>
+														{' '}
+														{w.description}
+													</Text>
+												</Box>
+											))}
+										</Stack>
+									</VStack>
+								</WrapItem>
+							</Wrap>
+						);
+					})}
+				</Wrap>
 			</>
 		);
 	};
 
 	return (
 		<>
-			<Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-				<chakra.h1
-					color='blue.300'
-					fontFamily='serif'
-					textAlign={'center'}
-					fontSize={'5xl'}
-					py={8}
-					fontWeight={'bold'}>
-					Where should you go today?
-				</chakra.h1>
-
-				<Grid
+			<Box
+				maxW='8xl'
+				mx={'auto'}
+				pt={5}
+				px={{ base: 2, sm: 12, md: 17 }}
+				userSelect='none'>
+				<SimpleGrid
 					columns={1}
 					spacing={{ base: 3, lg: 2, md: 3 }}
 					maxH='fit-content'
 					maxW='2xl'
 					mx='auto'
 					p='4'>
-					<SS
-						description={description}
-						temp_min={temp_min}
-						icon={icon}
-						feels_like={feels_like}
-						temp_max={temp_max}
-						humidity={humidity}
-						name={snap.name}
-						sunrise={rise}
-						sunset={sets}
-					/>
-					{/* 		<StatsCard
-						description={description}
-						temp_min={temp_min}
-						icon={icon}
-						feels_like={feels_like}
-						temp_max={temp_max}
-						humidity={humidity}
-						name={snap.name}
-						sunrise={rise}
-						sunset={sets}
-					/> */}
+					<chakra.h1
+						isTruncated
+						color='blue.300'
+						textAlign={'center'}
+						fontSize={{ base: '2xl', lg: '4xl', md: '3xl', sm: 'lg' }}
+						py={8}
+						className='t3'
+						fontFamily='serif'
+						letterSpacing='wider'
+						fontWeight={'extrabold'}>
+						Where should you go today?
+					</chakra.h1>
+					<StatsCard currentData={snap.current} />
+					<Weekly />
 					<SearchInput />
-				</Grid>
+				</SimpleGrid>
 			</Box>
 		</>
 	);
