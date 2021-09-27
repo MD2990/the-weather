@@ -31,7 +31,7 @@ export default function SearchInput() {
 					state.isLoading = true;
 					const res = await axios.get(`/api/week/${value}`);
 
-					console.log(res);
+					
 
 					state.week = res.data.week;
 					state.current = res.data.current;
@@ -41,7 +41,7 @@ export default function SearchInput() {
 					Swal.fire({
 						icon: 'error',
 						title: 'Oops...',
-						text: 'Something went wrong! Please check your city name and try again '+error,
+						text: 'Something went wrong! Please check your city name and try again ',
 					});
 					state.isLoading = false;
 				}
