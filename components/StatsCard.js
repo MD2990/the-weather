@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import state from '../store';
 import round from '../lib/functions';
+import { Spinner } from '@chakra-ui/spinner';
 
 export default function StatsCard({ currentData }) {
 	useEffect(() => {
@@ -29,7 +30,7 @@ export default function StatsCard({ currentData }) {
 						fontSize={fontSize}
 						fontWeight='extrabold'
 						color='deepskyblue'>
-						{round(feels_like)}
+						{feels_like ? round(feels_like) : <Spinner />}
 					</StatLabel>
 					<StatNumber
 						fontSize={fontSize}
@@ -57,14 +58,14 @@ export default function StatsCard({ currentData }) {
 
 				<HStack justify='space-around'>
 					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Min {round(temp_min)}
+						Min {temp_min ? round(temp_min) : <Spinner />}
 					</StatNumber>
 
 					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Max: {round(temp_max)}
+						Max: {temp_max ? round(temp_max) : <Spinner />}
 					</StatNumber>
 					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Humidity: {humidity}
+						Humidity: {humidity || <Spinner />}
 					</StatNumber>
 				</HStack>
 			</Stat>

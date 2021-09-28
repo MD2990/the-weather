@@ -120,39 +120,6 @@ export default function Weekly() {
 							<Item color='yellow' attr={day} Icons={FiSun} />
 							<Item color='#c99e26' attr={night} Icons={RiMoonClearFill} />
 						</Wrap>
-
-						{/* 	<WrapItem>
-							<VStack
-							justify='center'
-							border='solid 1px lightGreen'
-								rounded='full'
-							
-								spacing='4'>
-								<HStack>
-								</HStack>
-							</VStack>
-						</WrapItem> */}
-
-						{/* 		<WrapItem>
-							<VStack
-								justify='center'
-								border='solid 1px lightGreen'
-								rounded='full'
-								w='150px'
-								h='80px'
-								spacing='4'>
-								<HStack>
-								</HStack>
-							</VStack>
-						</WrapItem> */}
-
-						{/* 	<WrapItem>
-							<Divider
-							orientation='vertical'
-							borderColor='green.100'
-							shadow='sm'
-							/>
-						</WrapItem> */}
 					</Wrap>
 				);
 			})}
