@@ -51,18 +51,16 @@ export default function SearchInput() {
 		}
 	};
 	return (
-		<VStack mt='7'>
+		<VStack mt='7' maxW='30rem'>
 			<Input ref={ref} placeholder='Search for your city' size='lg' />
 			<Button
-				leftIcon={<TiWeatherStormy size='2.5rem' />}
+				leftIcon={<TiWeatherStormy size='2.5rem' color='lightGreen' />}
 				colorScheme='teal'
 				onClick={handelChange}
 				size='lg'
 				isLoading={snap.isLoading}>
-				Search
+				Get the weather
 			</Button>
-
-		
 		</VStack>
 	);
 }

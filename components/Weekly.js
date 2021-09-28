@@ -1,12 +1,9 @@
 import {
 	Box,
-	Container,
 	Divider,
 	HStack,
-	SimpleGrid,
 	Stack,
 	Text,
-	VStack,
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/layout';
@@ -20,10 +17,21 @@ import { FaTemperatureHigh, FaTemperatureLow } from 'react-icons/fa';
 import { FiSun } from 'react-icons/fi';
 import { RiMoonClearFill } from 'react-icons/ri';
 
+
+const Item = ({ color, attr, Icons, times }) => {
+	return (
+		<WrapItem>
+			<Text textAlign='center' color='green.100'>
+				<Icons color={color} size='1.8rem' /> {attr ? round(attr) : times}
+			</Text>
+		</WrapItem>
+	);
+};
+
 export default function Weekly() {
 	const snap = useSnapshot(state);
 	return (
-		<SimpleGrid columns={3} spacing={10} minW='xl' justify='center'>
+		<Wrap spacing={4} justify='center'>
 			{snap.week.daily?.map((d, index) => {
 				const ds = new Date(d.dt * 1000).toLocaleDateString();
 				const options = { hour: '2-digit', minute: '2-digit' };
@@ -45,14 +53,24 @@ export default function Weekly() {
 
 				const weather = d.weather.map((w) => w);
 				return (
-					<Wrap key={index} className='im2' borderRadius='xl' justify='center'>
+					<Wrap
+						key={index}
+						className='im2'
+						borderRadius='xl'
+						justify='center'
+						maxW='22rem'>
 						<WrapItem pt='4'>
 							<HStack
 								justify='space-between'
 								fontSize={{ base: 'sm', lg: 'lg', md: 'md', sm: 'xs' }}>
-								<Text>{index == 0 ? 'Today' : theDay}</Text>
+								<Text color='gray.100'>{index == 0 ? 'Today' : theDay}</Text>
 
-								<Text> {ds}</Text>
+								<Text
+									color='gray.100'
+									fontSize={{ base: 'sm', lg: 'lg', md: 'md', sm: 'xs' }}>
+									{' '}
+									{ds}
+								</Text>
 							</HStack>
 						</WrapItem>
 
@@ -68,11 +86,13 @@ export default function Weekly() {
 											height={52}
 										/>
 										<Text
+											fontSize={{ base: 'md', lg: '2xl', md: 'xl', sm: 'xl' }}
+											color='gray.200'
 											isTruncated
+											fontWeight='bold'
 											textTransform='capitalize'
 											textOverflow='ellipsis'
 											mt='-4'>
-											{' '}
 											{w.description}
 										</Text>
 									</Box>
@@ -82,27 +102,38 @@ export default function Weekly() {
 
 						<Divider borderColor='transparent' />
 
-						<WrapItem>
-							<VStack
-								justify='center'
-								border='solid 1px lightGreen'
-								rounded='full'
-								w='150px'
-								h='80px'>
-								<HStack>
-									<Text textAlign='center'>
-										<FaTemperatureHigh color='#fa2c07' size='1.8rem' />{' '}
-										{round(max)}
-									</Text>
+						<Wrap spacing='6' p='4'>
+							<Item color='#fa2c07' attr={max} Icons={FaTemperatureHigh} />
+							<Item color='#07fae2' attr={min} Icons={FaTemperatureLow} />
+							<Item
+								color='yellow'
+								times={sunrise.replace('AM', '')}
+								Icons={GiSunrise}
+							/>
 
-									<Text textAlign='center'>
-										<FaTemperatureLow color='#07fae2' size='1.8rem' />{' '}
-										{round(min)}
-									</Text>
+							<Item
+								color='orange'
+								times={sunset.replace('PM', '')}
+								Icons={GiSunset}
+							/>
+
+							<Item color='yellow' attr={day} Icons={FiSun} />
+							<Item color='#c99e26' attr={night} Icons={RiMoonClearFill} />
+						</Wrap>
+
+						{/* 	<WrapItem>
+							<VStack
+							justify='center'
+							border='solid 1px lightGreen'
+								rounded='full'
+							
+								spacing='4'>
+								<HStack>
 								</HStack>
 							</VStack>
-						</WrapItem>
-						<WrapItem>
+						</WrapItem> */}
+
+						{/* 		<WrapItem>
 							<VStack
 								justify='center'
 								border='solid 1px lightGreen'
@@ -111,38 +142,9 @@ export default function Weekly() {
 								h='80px'
 								spacing='4'>
 								<HStack>
-									<Text textAlign='center'>
-										<GiSunrise color='yellow' size='1.8rem' />{' '}
-										{sunrise.replace('AM', '')}
-									</Text>
-									<Text textAlign='center'>
-										<GiSunset color='orange' size='1.8rem' />
-										{sunset.replace('PM', '')}{' '}
-									</Text>
 								</HStack>
 							</VStack>
-						</WrapItem>
-
-						<WrapItem>
-							<VStack
-								justify='center'
-								border='solid 1px lightGreen'
-								rounded='full'
-								w='150px'
-								h='80px'
-								spacing='4'>
-								<HStack>
-									<Text textAlign='center'>
-										<FiSun color='yellow' size='1.8rem' />
-										{round(day)}
-									</Text>
-									<Text textAlign='center'>
-										<RiMoonClearFill color='#c99e26' size='1.8rem' />{' '}
-										{round(night)}
-									</Text>
-								</HStack>
-							</VStack>
-						</WrapItem>
+						</WrapItem> */}
 
 						{/* 	<WrapItem>
 							<Divider
@@ -154,6 +156,6 @@ export default function Weekly() {
 					</Wrap>
 				);
 			})}
-		</SimpleGrid>
+		</Wrap>
 	);
 }

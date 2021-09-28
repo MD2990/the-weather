@@ -1,4 +1,4 @@
-import { Box, chakra, SimpleGrid, Center } from '@chakra-ui/react';
+import { Box, chakra, Center, Wrap } from '@chakra-ui/react';
 
 import SearchInput from './SearchInput';
 import { useEffect } from 'react';
@@ -19,34 +19,27 @@ export default function Main({ currentData, weekData }) {
 
 	return (
 		<>
-			<Box
-				maxW='8xl'
-				mx={'auto'}
-				pt={5}
-				px={{ base: 2, sm: 12, md: 17 }}
-				userSelect='none'>
-				<SimpleGrid
-					columns={1}
+			<Box m='2' pt={5} px={{ base: 2, sm: 12, md: 17 }} userSelect='none'>
+				<SearchInput />
+				<chakra.h1
+					isTruncated
+					textAlign={'center'}
+					fontSize={{ base: '2xl', lg: '3xl', md: '2xl', sm: 'lg' }}
+					py={8}
+					className='t3'
+					fontFamily='serif'
+					letterSpacing='wider'
+					fontWeight={'extrabold'}>
+					Where should you go today?
+				</chakra.h1>
+				<Wrap
+					justify='center'
 					spacing={{ base: 3, lg: 2, md: 3 }}
-					maxH='fit-content'
-					maxW='2xl'
 					mx='auto'
 					p='4'>
-					<chakra.h1
-						isTruncated
-						textAlign={'center'}
-						fontSize={{ base: '3xl', lg: '5xl', md: '4xl', sm: '2xl' }}
-						py={8}
-						className='t3'
-						fontFamily='serif'
-						letterSpacing='wider'
-						fontWeight={'extrabold'}>
-						Where should you go today?
-					</chakra.h1>
 					<StatsCard currentData={snap.current} />
 					<Weekly />
-					<SearchInput />
-				</SimpleGrid>
+				</Wrap>
 			</Box>
 		</>
 	);
