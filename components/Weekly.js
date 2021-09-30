@@ -21,8 +21,11 @@ import { RiMoonClearFill } from 'react-icons/ri';
 const Item = ({ color, attr, Icons, times }) => {
 	return (
 		<WrapItem>
-			<Text textAlign='center' color='green.100'>
-				<Icons color={color} size='1.8rem' /> {attr ? round(attr) : times}
+			<Text
+				textAlign='center'
+				color='gray.200'
+				fontSize={{ base: 'sm', lg: 'md', md: 'sm', sm: 'xs' }}>
+				<Icons color={color} size='2.0rem' /> {attr ? round(attr) : times}
 			</Text>
 		</WrapItem>
 	);
@@ -31,7 +34,7 @@ const Item = ({ color, attr, Icons, times }) => {
 export default function Weekly() {
 	const snap = useSnapshot(state);
 	return (
-		<Wrap spacing={4} justify='center'>
+		<Wrap spacing={4} justify='center' pt='4'>
 			{snap.week.daily?.map((d, index) => {
 				const ds = new Date(d.dt * 1000).toLocaleDateString();
 				const options = { hour: '2-digit', minute: '2-digit' };
@@ -102,7 +105,10 @@ export default function Weekly() {
 
 						<Divider borderColor='transparent' />
 
-						<Wrap spacing='6' p='4'>
+						<Wrap
+							spacing={{ base: '2', lg: '4', md: '3', sm: '2' }}
+							p={{ base: '2', lg: '4', md: '3', sm: '6' }}
+							whiteSpace='nowrap'>
 							<Item color='#fa2c07' attr={max} Icons={FaTemperatureHigh} />
 							<Item color='#07fae2' attr={min} Icons={FaTemperatureLow} />
 							<Item

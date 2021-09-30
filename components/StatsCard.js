@@ -5,18 +5,31 @@ import Image from 'next/image';
 import state from '../store';
 import round from '../lib/functions';
 import { Spinner } from '@chakra-ui/spinner';
+import { useSnapshot } from 'valtio';
 
-export default function StatsCard({ currentData }) {
-	useEffect(() => {
-		state.current = currentData;
-	}, [currentData]);
 
-	const data = currentData.weather?.map((w) => w);
+
+const Label = ({ children }) => (
+	<StatNumber overflow='hidden' textOverflow='ellipsis'  whiteSpace='nowrap'
+		fontSize={{ base: 'sm', lg: 'lg', md: 'md', sm: 'xs' }}
+		fontWeight='light'
+		color='cyan.200'>
+		{children}
+	</StatNumber>
+);
+export default function StatsCard() {
+
+	const snap = useSnapshot(state);
+
+
+
+	const data = snap.current?.weather?.map((w) => w);
 	const { description, icon } = data ? data[0] : [];
-	const { feels_like, temp_min, temp_max, humidity } = currentData.main || {};
+	const { feels_like, temp_min, temp_max, humidity } = snap.current?.main || {};
 	const fontSize = { base: '2xl', lg: '6xl', md: '5xl', sm: '4xl' };
 	return (
 		<Center
+			
 			px={{ base: 4, md: 8 }}
 			py={'8'}
 			className='im'
@@ -36,7 +49,7 @@ export default function StatsCard({ currentData }) {
 						fontSize={fontSize}
 						fontWeight={'extrabold'}
 						color='green.100'>
-						{currentData.name}
+						{snap.current?.name}
 					</StatNumber>
 					<Image
 						src={`http://openweathermap.org/img/wn/${icon}.png`}
@@ -56,17 +69,12 @@ export default function StatsCard({ currentData }) {
 					</StatLabel>
 				</Box>
 
-				<HStack justify='space-around'>
-					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Min {temp_min ? round(temp_min) : <Spinner />}
-					</StatNumber>
+				<HStack justify='space-around' spacing={{base:'5',lg:'6',md:'5',sm:'2'}} >
+					<Label>Min {temp_min ? round(temp_min) : <Spinner />}</Label>
+					<Label> Max {temp_max ? round(temp_max) : <Spinner />}</Label>
+					<Label> Humidity {humidity || <Spinner />}</Label>
 
-					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Max: {temp_max ? round(temp_max) : <Spinner />}
-					</StatNumber>
-					<StatNumber fontSize={'xl'} fontWeight='bold' color='cyan.200'>
-						Humidity: {humidity || <Spinner />}
-					</StatNumber>
+			
 				</HStack>
 			</Stat>
 		</Center>
