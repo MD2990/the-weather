@@ -1,6 +1,6 @@
 import { Box, Center, HStack } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import state from '../store';
 import round from '../lib/functions';

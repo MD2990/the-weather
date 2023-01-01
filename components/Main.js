@@ -1,12 +1,8 @@
 import {
 	Box,
-	chakra,
 	Center,
 	Wrap,
-	Spacer,
 	Spinner,
-	WrapItem,
-	HStack,
 } from '@chakra-ui/react';
 
 import SearchInput from './SearchInput';
