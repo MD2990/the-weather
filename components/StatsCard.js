@@ -1,9 +1,12 @@
-<<<<<<< HEAD
-import { Box, Center, HStack, Stat, StatLabel, StatNumber ,Spinner} from '@chakra-ui/react';
-=======
-import { Box, Center, HStack } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
->>>>>>> 2da27dfaf4de87ade43ac3ca5fb88daa4c0f1a73
+import {
+  Stat,
+  StatLabel,
+  StatNumber,
+  Center,
+  Box,
+  Spinner,
+  HStack,
+} from "@chakra-ui/react";
 import React from 'react';
 import Image from 'next/image';
 import state from '../store';
@@ -72,7 +75,7 @@ export default function StatsCard() {
 					</StatLabel>
 				</Box>
 
-				<HStack justify='space-around' spacing={{base:'5',lg:'6',md:'5',sm:'2'}} >
+				<HStack justify='space-around' spacing={[1,2,3,4]} >
 					<Label>Min {temp_min ? round(temp_min) : <Spinner />}</Label>
 					<Label> Max {temp_max ? round(temp_max) : <Spinner />}</Label>
 					<Label> Humidity {humidity || <Spinner />}</Label>

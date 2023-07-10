@@ -115,7 +115,7 @@ export default function Weekly() {
             <Divider borderColor="transparent" />
 
             <Wrap
-              spacing={[1, 2, 3, 4, 6]}
+              spacing={[1, 2, 3, 4]}
               p={[1, 2, 3, 4]}
               whiteSpace="nowrap"
               justify="center"
