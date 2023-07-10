@@ -1,66 +1,69 @@
-import React, { useRef } from 'react';
-import { Button } from '@chakra-ui/button';
-import { Input } from '@chakra-ui/input';
-import { VStack } from '@chakra-ui/layout';
-import { useSnapshot } from 'valtio';
-import state from '../store';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import { TiWeatherStormy } from 'react-icons/ti';
+import React from "react";
+import { VStack, Input, Button } from "@chakra-ui/react";
+import { useSnapshot } from "valtio";
+import state from "../store";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { TiWeatherStormy } from "react-icons/ti";
 
 export default function SearchInput() {
-	const snap = useSnapshot(state);
-	const ref = useRef('');
+  const snap = useSnapshot(state);
 
-	const handelChange = () => {
-		const value = ref.current.value || '';
+  const handelSubmit = () => {
+    if (!snap.city.trim() || snap.city.trim().length <= 2)
+      return Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: "Please enter some more characters to get your city's info ",
+      });
 
-		if (!value.trim() || value.trim().length < 2) {
-			Swal.fire({
-				icon: 'info',
-				title: 'Oops...',
-				text: "Please enter some more characters to get your city's info ",
-			});
-
-			
-			
-		} else {
-			async function getUser() {
-				try
-				{
-					state.isLoading = true;
-					const res = await axios.get(`/api/week/${value}`);
-
-					
-
-					state.week = res.data.week;
-					state.current = res.data.current;
-
-					state.isLoading = false;
-				} catch (error) {
-					Swal.fire({
-						icon: 'error',
-						title: 'Oops...',
-						text: 'Something went wrong! Please check your city name and try again ',
-					});
-					state.isLoading = false;
-				}
-			}
-
-			getUser();
-		}
-	};
-	return (
-		<VStack mt='7' maxW='30rem'>
-			<Input ref={ref} placeholder='Search for your city' size='lg' />
-			<Button
-				leftIcon={<TiWeatherStormy size='2.5rem' color='lightGreen' />}
-				colorScheme='teal'
-				onClick={handelChange}
-				size='lg'
-				isLoading={snap.isLoading}>
-				Get the weather
-			</Button>
-		</VStack>
-	);
+    getUser();
+  };
+  return (
+    <VStack mt="7" maxW="30rem" justify={"center"}>
+      <Input
+        noOfLines={1}
+        type="search"
+        placeholder="Search for your city"
+        size={["xs", "sm", "md", "lg"]}
+        onChange={(e) => {
+          state.city = e.target.value;
+        }}
+        // on enter press
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handelSubmit();
+          }
+        }}
+      />
+      <Button
+        py={"1rem"}
+        leftIcon={<TiWeatherStormy size="2rem" color="lightGreen" />}
+        colorScheme="teal"
+        onClick={handelSubmit}
+        size={["xs", "sm", "md", "lg"]}
+        isLoading={snap.isLoading}
+        isDisabled={snap.isLoading || snap.city.trim().length <= 2}
+        loadingText={`Getting the weather for ${snap.city.toLocaleUpperCase()}`}
+      >
+        Get the weather
+      </Button>
+    </VStack>
+  );
+}
+async function getUser() {
+  try {
+    state.isLoading = true;
+    const res = await axios.get(`/api/week/${state.city}`);
+    state.week = res.data.week;
+    state.current = res.data.current;
+    state.isLoading = false;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong! Please check your city name and try again ",
+    });
+    state.isLoading = false;
+  }
 }

@@ -1,10 +1,8 @@
-import { Box, Center, HStack } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
-import React, { useEffect } from 'react';
+import { Box, Center, HStack, Stat, StatLabel, StatNumber ,Spinner} from '@chakra-ui/react';
+import React from 'react';
 import Image from 'next/image';
 import state from '../store';
 import round from '../lib/functions';
-import { Spinner } from '@chakra-ui/spinner';
 import { useSnapshot } from 'valtio';
 
 
@@ -20,9 +18,6 @@ const Label = ({ children }) => (
 export default function StatsCard() {
 
 	const snap = useSnapshot(state);
-
-
-
 	const data = snap.current?.weather?.map((w) => w);
 	const { description, icon } = data ? data[0] : [];
 	const { feels_like, temp_min, temp_max, humidity } = snap.current?.main || {};
@@ -35,8 +30,10 @@ export default function StatsCard() {
 			className='im'
 			shadow={'2xl'}
 			borderColor={'gray.400'}
-			rounded={'lg'}>
-			<Stat>
+			rounded={'lg'}
+				
+			>
+			<Stat >
 				<Box textAlign='center' p='2'>
 					<StatLabel
 						className='text'
@@ -52,6 +49,7 @@ export default function StatsCard() {
 						{snap.current?.name}
 					</StatNumber>
 					<Image
+
 						src={`http://openweathermap.org/img/wn/${icon}.png`}
 						alt='universe'
 						width={52}
