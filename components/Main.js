@@ -1,5 +1,21 @@
+<<<<<<< HEAD
 "use client";
 import { Box, Center, Wrap, Spinner, VStack } from "@chakra-ui/react";
+=======
+import {
+	Box,
+	Center,
+	Wrap,
+	Spinner,
+} from '@chakra-ui/react';
+
+import SearchInput from './SearchInput';
+import { useEffect } from 'react';
+import { useSnapshot } from 'valtio';
+import state from '../store';
+import Weekly from './Weekly';
+import StatsCard from './StatsCard';
+>>>>>>> 2da27dfaf4de87ade43ac3ca5fb88daa4c0f1a73
 
 import SearchInput from "./SearchInput";
 import { useEffect } from "react";
