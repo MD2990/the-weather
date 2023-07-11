@@ -20,7 +20,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "sweetalert2": "^11.7.12",
-    "valtio": "^1.10.6"
+    "valtio": "^1.10.7"
   },
   "devDependencies": {
     "eslint": "^8.44.0",
