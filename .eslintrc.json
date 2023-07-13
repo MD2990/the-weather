@@ -1,14 +1,10 @@
 {
   "extends": [
+    "next",
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
-    "prettier/react",
-    "prettier",
-    "plugin:valtio/recommended",
-    "plugin:react-hooks/recommended"
-  ]
+    "plugin:valtio/recommended"
+  ],
+  "rules": { "react/prop-types": 0 }
 }

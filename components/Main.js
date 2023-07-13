@@ -1,11 +1,13 @@
 "use client";
+import React from "react";
 import { Center, Wrap, Spinner, VStack } from "@chakra-ui/react";
 import SearchInput from './SearchInput';
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
-import state from '../store';
+import state from '@store';
 import Weekly from './Weekly';
 import StatsCard from './StatsCard';
+
 
 export default function Main({ currentData, weekData }) {
   const snap = useSnapshot(state);

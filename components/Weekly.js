@@ -2,7 +2,6 @@ import {
   Box,
   Divider,
   HStack,
-  Stack,
   Text,
   Wrap,
   WrapItem,
