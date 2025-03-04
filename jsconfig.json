@@ -1,11 +1,15 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@components/*": ["components/*"],
-      "@public/*": ["public/*"],
-      "@lib/*": ["lib/*"],
-      "@store*": ["store"],
-    }
-  }
+	"compilerOptions": {
+		"baseUrl": ".",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"skipLibCheck": true,
+		"paths": {
+			"@components/*": ["components/*"],
+			"@public/*": ["public/*"],
+			"@lib/*": ["lib/*"],
+			"@store*": ["store"]
+		}
+	}
 }

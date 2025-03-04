@@ -4,7 +4,4 @@ module.exports = {
     domains: ["openweathermap.org"],
   },
 
-  experimental: {
-    appDir: true,
-  },
 };
