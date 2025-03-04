@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { TiWeatherStormy } from "react-icons/ti";
 import { InputGroup } from "./ui/input-group";
 import { LuCloudSun } from "react-icons/lu";
+import { getByCityName } from "app/server/actions";
 
 export default function SearchInput() {
 	const snap = useSnapshot(state);
@@ -67,25 +68,24 @@ export default function SearchInput() {
 async function getWeeklyData() {
 	try {
 		state.isLoading = true;
-		const res = await fetch(`/data?id=${state.city}`);
+		const { ok, current, status, weekData } = await getByCityName(state.city);
 
-		if (!res.ok) {
+		if (!ok) {
 			state.isLoading = false;
 			return Swal.fire({
 				icon: "error",
-				title: "Oops...",
-				text: `${state.city.toLocaleUpperCase()} not found! Please check your city name and try again`,
+				title: `Status code: ${status}`,
+				text: `${state.city.toLocaleUpperCase()} not found! Please check your city name and try again `,
 			});
 		}
 
-		const { weekData, current } = await res.json();
 		state.week = weekData;
 		state.currentData = current;
 		state.isLoading = false;
-	} catch  {
+	} catch (error) {
 		Swal.fire({
 			icon: "error",
-			title: "Oops...",
+			title: `Oops... ${error.message}`,
 			text: "Something went wrong! Please check your city name and try again ",
 		});
 	} finally {
